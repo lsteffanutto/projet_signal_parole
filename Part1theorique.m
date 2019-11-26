@@ -34,8 +34,7 @@ dsp = (fftshift(abs(fft(bb)).^2))*var; %DSP
 
 %PERIODOGRAMMES
 %WELCH
- periodogram = pwelch(bb,nfft,noverlap, 'centered');
-%periodogram = pwelch(bb);
+periodogramW = pwelch(bb,nfft,noverlap, 'centered');
 
 %DANIELL
 ws = 100;
@@ -69,38 +68,39 @@ end
 
 %BARTLETT
 
-
+noverlapnul=0;
+periodogramB = pwelch(bb,nfft,noverlapnul,'centered');
 
 
 %% FIGURES
 %BBGC
-% figure;
-% plot(bb);
-% title('BBGC');
-% xlabel('échantillons');
-% ylabel('amplitude');
-% 
-% %AUTOCORR
-% figure;
-% 
-% subplot(3,1,1);
-% plot(t,Rbb);
-% title('Rbb');
-% xlabel('échantillons');
-% ylabel('amplitude');
-% 
-% subplot(3,1,2);
-% plot(t,Rbb_b);
-% title('Rbb-Biased');
-% xlabel('échantillons');
-% ylabel('amplitude');
-% 
-% subplot(3,1,3);
-% plot(t,Rbb_unb);
-% title('Rbb-Unbiased');
-% xlabel('échantillons');
-% ylabel('amplitude');
-% 
+figure;
+plot(bb);
+title('BBGC');
+xlabel('échantillons');
+ylabel('amplitude');
+
+%AUTOCORR
+figure;
+
+subplot(3,1,1);
+plot(t,Rbb);
+title('Rbb');
+xlabel('échantillons');
+ylabel('amplitude');
+
+subplot(3,1,2);
+plot(t,Rbb_b);
+title('Rbb-Biased');
+xlabel('échantillons');
+ylabel('amplitude');
+
+subplot(3,1,3);
+plot(t,Rbb_unb);
+title('Rbb-Unbiased');
+xlabel('échantillons');
+ylabel('amplitude');
+
 %DSP/SPECTRE DE PUISSANCE
 
 figure
@@ -117,8 +117,15 @@ xlabel('Fréquence normalisée')
 ylabel('Puissance') % en puissance
 
 %PERIODOGRAMME
-figure, plot(fft_abscisse,periodogram);
+figure,
+subplot(3,1,1);
+plot(fft_abscisse,periodogramW);
 title('Pwelch');
 
-figure, plot(f,res);
+subplot(3,1,2);
+plot(f,res);
 title('PDaniell');
+
+subplot(3,1,3);
+plot(fft_abscisse,periodogramB');
+title('PBarlett');
