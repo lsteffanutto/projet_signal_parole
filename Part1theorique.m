@@ -71,6 +71,12 @@ end
 noverlapnul=0;
 periodogramB = pwelch(bb,nfft,noverlapnul,'centered');
 
+%Correlogramme 1 et 2
+
+%correlo1= xcorr(bb-mean(bb)) / var;
+correlo2=abs(fft(Rbb));
+
+
 
 %% FIGURES
 %BBGC
@@ -129,3 +135,7 @@ title('PDaniell');
 subplot(3,1,3);
 plot(fft_abscisse,periodogramB');
 title('PBarlett');
+
+%CORRELOGRAMME
+figure,plot(t,correlo2);
+title('correlogram');
