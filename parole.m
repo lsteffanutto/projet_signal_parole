@@ -21,7 +21,7 @@ t = 0:Tech:length(sig1)*Tech-Tech;
 
 
 %% TRAITEMENT
-sig1 = addnoise(sig1,5);
+sig1 = addnoise(sig1,15);
 
 len_trame = 256;
 nb_trames = len_sig1/len_trame;
@@ -62,7 +62,7 @@ fs = 10000;
 win  = 8;
 spectro_noverlap = 0.5*win; 
 spectrogram(sig1,win,spectro_noverlap,[],fech,'yaxis')
-title('signal 1');
+title('spectro signal 1');
 
 % %SIGNAL DECOMP TRAMES
 
@@ -70,8 +70,7 @@ figure,
 subplot(2,1,1)
 plot(t,sig1);
 title('signal 1');
-t_decomp = 0:Tech:length(sig1_decomp)*Tech-Tech;
-figure, 
+t_decomp = 0:Tech:length(sig1_decomp)*Tech-Tech; 
 subplot(2,1,2)
 plot(t_decomp,sig1_decomp);
 title('signal decompose en trames qui se suivent');
@@ -92,8 +91,6 @@ plot(t_trame,trame_hann);
 title('1st trame fenetred');
 
 %SIGNAL FENETRE RECONSTITUE EXACTEMENT
-
-
 
 [signal_final] = fenetrage_signal(sig1_reshape_imp, sig1_reshape_pair,len_trame,nb_trames, recouvrement);
 
