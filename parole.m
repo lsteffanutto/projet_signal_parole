@@ -21,7 +21,7 @@ t = 0:Tech:length(sig1)*Tech-Tech;
 
 
 %% TRAITEMENT
-sig1 = addnoise(sig1,15);
+sig1 = addnoise(sig1,5);
 
 len_trame = 256;
 nb_trames = len_sig1/len_trame;
@@ -43,14 +43,45 @@ sig1_trame_rec0 = reshape(sig1, [ len_trame, nb_trames]); % SIG1 découpé en 41
 %Et reconstituer EXACTEMENT le signal de départ 
 %(sauf le début et la i.e. len_trames/2
 
+
+%Matrice de Hankel sur une trame
+
+for i=1:nb_trames
+    trame = sig1_decomp( (i-1)*(len_trame)+1 : i*len_trame );
+
+    % M=128;
+    % K=128; %valeurs singulières utiles
+    % L=len_trame+1-M;
+    % sigHankel = hankel(trame(1:L),trame(L:L+M-1));
+    % [U,S,V]=svd(sigHankel); % Dans S on veut les K valeurs singulière les plus importantes sur les 129
+    % S=[S(:,1:K) zeros(size(S(:,K+1:end)))]; %Laisse les vs importante (skill incroyable)
+    % test=U*S*V'; %On retrouve bien Hankel
+
+    [trame_debruite, valeurs] = debruitage_trame(trame, 128, 5);
+    
+    sig1_decomp( (i-1)*(len_trame)+1 : i*len_trame ) = trame_debruite;
+
+end
+
 [signal_final] = fenetrage_signal(sig1_reshape_imp, sig1_reshape_pair,len_trame,nb_trames, recouvrement);
 
 
+t_trame = 0:Tech:len_trame*Tech-Tech;
+figure,
+subplot(2,1,1);
+plot(t_trame,trame);
+title('1st trame');
 
-%% FIGURES
+subplot(2,1,2);
+%win_hann = hann(len_trame)'; %symetric par defaut
+%trame_hann = trame.*win_hann;
+plot(t_trame,trame_debruite);
+title('trame debruite');
+
+%% FIGURES  (AJOUTER AXIS)
 
 %SIGNAL 1
-% % audiowrite('musique.wav',sig1,8000) %ECRIT LE SIGNAL DANS FICHIER AUDIO
+audiowrite('musique.wav',sig1,8000) %ECRIT LE SIGNAL DANS FICHIER AUDIO
 
 % %SIGNAL 1 + SPECTRO
 figure,
@@ -78,7 +109,6 @@ title('signal decompose en trames qui se suivent');
 
 % %UNE TRAME / UNE TRAME FENETRE
 t_trame = 0:Tech:len_trame*Tech-Tech;
-trame = sig1_decomp(1,1:len_trame);
 figure,
 subplot(2,1,1);
 plot(t_trame,trame);
@@ -101,3 +131,5 @@ title('signal 1');
 subplot(2,1,2)
 plot(t,signal_final);
 title('signal decompose en trames windowed');
+audiowrite('musique1.wav',signal_final,8000) %ECRIT LE SIGNAL DANS FICHIER AUDIO
+
