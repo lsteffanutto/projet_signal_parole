@@ -57,79 +57,80 @@ for i=1:nb_trames
     % S=[S(:,1:K) zeros(size(S(:,K+1:end)))]; %Laisse les vs importante (skill incroyable)
     % test=U*S*V'; %On retrouve bien Hankel
 
-    [trame_debruite, valeurs] = debruitage_trame(trame, 128, 5);
+    [trame_debruite, valeurs] = debruitage_trame(trame, 128, 8);
     
     sig1_decomp( (i-1)*(len_trame)+1 : i*len_trame ) = trame_debruite;
 
 end
 
-[signal_final] = fenetrage_signal(sig1_reshape_imp, sig1_reshape_pair,len_trame,nb_trames, recouvrement);
 
 
 t_trame = 0:Tech:len_trame*Tech-Tech;
 figure,
-subplot(2,1,1);
 plot(t_trame,trame);
-title('1st trame');
 
-subplot(2,1,2);
+hold on;
 %win_hann = hann(len_trame)'; %symetric par defaut
 %trame_hann = trame.*win_hann;
 plot(t_trame,trame_debruite);
-title('trame debruite');
+title('1st trame et 1st trame debruite');
+legend('1st trame','1st trame debruite');
+
+[signal_final] = fenetrage_signal(sig1_reshape_imp, sig1_reshape_pair,len_trame,nb_trames, recouvrement);
+
 
 %% FIGURES  (AJOUTER AXIS)
 
 %SIGNAL 1
-audiowrite('musique.wav',sig1,8000) %ECRIT LE SIGNAL DANS FICHIER AUDIO
-
-% %SIGNAL 1 + SPECTRO
-figure,
-subplot(2,1,1)
-plot(t,sig1);
-title('signal 1');
-subplot(2,1,2);
-fs = 10000;
-win  = 8;
-spectro_noverlap = 0.5*win; 
-spectrogram(sig1,win,spectro_noverlap,[],fech,'yaxis')
-title('spectro signal 1');
-
-% %SIGNAL DECOMP TRAMES
-
-figure,
-subplot(2,1,1)
-plot(t,sig1);
-title('signal 1');
-t_decomp = 0:Tech:length(sig1_decomp)*Tech-Tech; 
-subplot(2,1,2)
-plot(t_decomp,sig1_decomp);
-title('signal decompose en trames qui se suivent');
-% % audiowrite('musiquedecomp.wav',sig1_decomp,8000) SIGNAL AUDIO x2
-
-% %UNE TRAME / UNE TRAME FENETRE
-t_trame = 0:Tech:len_trame*Tech-Tech;
-figure,
-subplot(2,1,1);
-plot(t_trame,trame);
-title('1st trame');
-
-subplot(2,1,2);
-win_hann = hann(len_trame)'; %symetric par defaut
-trame_hann = trame.*win_hann;
-plot(t_trame,trame_hann);
-title('1st trame fenetred');
-
-%SIGNAL FENETRE RECONSTITUE EXACTEMENT
-
-[signal_final] = fenetrage_signal(sig1_reshape_imp, sig1_reshape_pair,len_trame,nb_trames, recouvrement);
-
-figure,
-subplot(2,1,1)
-plot(t,sig1);
-title('signal 1');
-subplot(2,1,2)
-plot(t,signal_final);
-title('signal decompose en trames windowed');
-audiowrite('musique1.wav',signal_final,8000) %ECRIT LE SIGNAL DANS FICHIER AUDIO
+% audiowrite('musique.wav',sig1,8000) %ECRIT LE SIGNAL DANS FICHIER AUDIO
+% 
+% % %SIGNAL 1 + SPECTRO
+% figure,
+% subplot(2,1,1)
+% plot(t,sig1);
+% title('signal 1');
+% subplot(2,1,2);
+% fs = 10000;
+% win  = 8;
+% spectro_noverlap = 0.5*win; 
+% spectrogram(sig1,win,spectro_noverlap,[],fech,'yaxis')
+% title('spectro signal 1');
+% 
+% % %SIGNAL DECOMP TRAMES
+% 
+% figure,
+% subplot(2,1,1)
+% plot(t,sig1);
+% title('signal 1');
+% t_decomp = 0:Tech:length(sig1_decomp)*Tech-Tech; 
+% subplot(2,1,2)
+% plot(t_decomp,sig1_decomp);
+% title('signal decompose en trames qui se suivent');
+% % % audiowrite('musiquedecomp.wav',sig1_decomp,8000) SIGNAL AUDIO x2
+% 
+% % %UNE TRAME / UNE TRAME FENETRE
+% t_trame = 0:Tech:len_trame*Tech-Tech;
+% figure,
+% subplot(2,1,1);
+% plot(t_trame,trame);
+% title('1st trame');
+% 
+% subplot(2,1,2);
+% win_hann = hann(len_trame)'; %symetric par defaut
+% trame_hann = trame.*win_hann;
+% plot(t_trame,trame_hann);
+% title('1st trame fenetred');
+% 
+% %SIGNAL FENETRE RECONSTITUE EXACTEMENT
+% 
+% [signal_final] = fenetrage_signal(sig1_reshape_imp, sig1_reshape_pair,len_trame,nb_trames, recouvrement);
+% 
+% figure,
+% subplot(2,1,1)
+% plot(t,sig1);
+% title('signal 1');
+% subplot(2,1,2)
+% plot(t,signal_final);
+% title('signal decompose en trames windowed');
+% audiowrite('musique1.wav',signal_final,8000) %ECRIT LE SIGNAL DANS FICHIER AUDIO
 

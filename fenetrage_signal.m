@@ -33,7 +33,7 @@ end
 
 %On reconstruit alors le signal fenetre/moyenne (sauf debut et fin)
 
-signal_windowed
+signal_windowed;
 
 decalage = zeros(1,128);
 
