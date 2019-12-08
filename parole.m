@@ -88,14 +88,14 @@ title('spectro signal 1');
 
 % %SIGNAL DECOMP TRAMES
 
-figure,
-subplot(2,1,1)
-plot(t,sig1);
-title('signal 1');
-t_decomp = 0:Tech:length(sig1_decomp)*Tech-Tech; 
-subplot(2,1,2)
-plot(t_decomp,sig1_decomp);
-title('signal decompose en trames qui se suivent');
+% figure,
+% subplot(2,1,1)
+% plot(t,sig1);
+% title('signal 1');
+% t_decomp = 0:Tech:length(sig1_decomp)*Tech-Tech; 
+% subplot(2,1,2)
+% plot(t_decomp,sig1_decomp);
+% title('signal decompose en trames qui se suivent');
 %audiowrite('musiquedecomp.wav',sig1_decomp,8000) SIGNAL AUDIO x2
 
 % %UNE TRAME / UNE TRAME FENETRE
@@ -139,11 +139,21 @@ plot(trame_sans_bruit);
 % plot(trame);
 
 hold on;
-%win_hann = hann(len_trame)'; %symetric par defaut
-%trame_hann = trame.*win_hann;
-plot(trame_debruite, "g");
+% win_hann = hann(len_trame)'; %symetric par defaut
+% trame_hann = trame.*win_hann;
+plot(trame_debruite, 'g');
 
 title('trame sans bruit , trame , trame debruite');
 
 legend('trame sans bruit','trame',' trame debruitee');
 
+figure,
+subplot(2,1,1)
+plot(t,signal_final);
+title('sig 1');
+subplot(2,1,2);
+fs = 10000;
+win  = 8;
+spectro_noverlap = 0.5*win; 
+spectrogram(signal_final,win,spectro_noverlap,[],fech,'yaxis')
+title('spectro signal 1');
