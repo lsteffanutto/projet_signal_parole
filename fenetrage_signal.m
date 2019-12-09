@@ -1,7 +1,7 @@
 function [signal_final] = fenetrage_signal(signal_reshape_imp, signal_reshape_pair,len_trame,nb_trames, recouvrement)
 
 decal = len_trame*(1-recouvrement/100); %recouvrement = 50
-K=10;
+K=6;
 M=64;
 win_hann = hann(len_trame); % fenre de Hann sur la durée du trame
 

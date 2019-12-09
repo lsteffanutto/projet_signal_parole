@@ -18,6 +18,7 @@ H_LS = U*S*V'; %On retrouve bien Hankel
 trame_debruite = zeros(1,len_trame);
 for i=1:len_trame-M
     trame_debruite(i:i+M-1) = trame_debruite(i:i+M-1) + H_LS(i,:);
+
 end
 
 nb_valeurs_gauche = 1:1:M;

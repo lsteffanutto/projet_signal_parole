@@ -27,7 +27,7 @@ sig1_parle = sig1 > 1000;
 %% TRAITEMENT
 sig1 = addnoise(sig1,5);
 
-len_trame = 1024;
+len_trame = 2048; %plus on augmente mieux c
 nb_trames = len_sig1/len_trame;
 
 recouvrement = 50;
@@ -53,7 +53,7 @@ sig1_trame_rec0 = reshape(sig1, [ len_trame, nb_trames]); % SIG1 découpé en 41
 for i=1:nb_trames
     trame = sig1_decomp( (i-1)*(len_trame)+1 : i*len_trame );
     
-    [trame_debruite nb_valeurs] = debruitage_trame(trame, 128, 8);
+    [trame_debruite, nb_valeurs] = debruitage_trame(trame, 128, 8);
     
     sig1_decomp( (i-1)*(len_trame)+1 : i*len_trame ) = trame_debruite;
 
@@ -150,10 +150,24 @@ legend('trame sans bruit','trame',' trame debruitee');
 figure,
 subplot(2,1,1)
 plot(t,signal_final);
-title('sig 1');
+title('signal final');
 subplot(2,1,2);
 fs = 10000;
 win  = 8;
 spectro_noverlap = 0.5*win; 
 spectrogram(signal_final,win,spectro_noverlap,[],fech,'yaxis')
+title('spectro signal final');
+
+figure,
+subplot(2,1,1)
+fs = 10000;
+win  = 8;
+spectro_noverlap = 0.5*win; 
+spectrogram(sig1,win,spectro_noverlap,[],fech,'yaxis')
 title('spectro signal 1');
+subplot(2,1,2);
+fs = 10000;
+win  = 8;
+spectro_noverlap = 0.5*win; 
+spectrogram(signal_final,win,spectro_noverlap,[],fech,'yaxis')
+title('spectro signal final');
