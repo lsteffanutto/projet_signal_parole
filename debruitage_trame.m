@@ -16,7 +16,7 @@ S=[S(:,1:K) zeros(size(S(:,K+1:end)))]; %Laisse les vs importante (skill incroya
 H_LS = U*S*V'; %On retrouve bien Hankel
 
 trame_debruite = zeros(1,len_trame);
-for i=1:len_trame-M
+for i=1:len_trame-M+1
     trame_debruite(i:i+M-1) = trame_debruite(i:i+M-1) + H_LS(i,:);
 
 end

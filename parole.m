@@ -27,7 +27,7 @@ sig1_parle = sig1 > 1000;
 %% TRAITEMENT
 sig1 = addnoise(sig1,5);
 
-len_trame = 2048; %plus on augmente mieux c
+len_trame = 512; %plus on augmente mieux c
 nb_trames = len_sig1/len_trame;
 
 recouvrement = 50;
@@ -75,16 +75,16 @@ end
 audiowrite('musique.wav',sig1,8000) %ECRIT LE SIGNAL DANS FICHIER AUDIO
 
 % %SIGNAL 1 + SPECTRO
-figure,
-subplot(2,1,1)
-plot(t,sig1);
-title('sig 1');
-subplot(2,1,2);
-fs = 10000;
-win  = 8;
-spectro_noverlap = 0.5*win; 
-spectrogram(sig1,win,spectro_noverlap,[],fech,'yaxis')
-title('spectro signal 1');
+% figure,
+% subplot(2,1,1)
+% plot(t,sig1);
+% title('sig 1');
+% subplot(2,1,2);
+% fs = 10000;
+% win  = 8;
+% spectro_noverlap = 0.5*win; 
+% spectrogram(sig1,win,spectro_noverlap,[],fech,'yaxis')
+% title('spectro signal 1');
 
 % %SIGNAL DECOMP TRAMES
 
@@ -99,17 +99,17 @@ title('spectro signal 1');
 %audiowrite('musiquedecomp.wav',sig1_decomp,8000) SIGNAL AUDIO x2
 
 % %UNE TRAME / UNE TRAME FENETRE
-t_trame = 0:Tech:len_trame*Tech-Tech;
-figure,
-subplot(2,1,1);
-plot(t_trame,trame);
-title('premiere trame');
-
-subplot(2,1,2);
-win_hann = hann(len_trame)'; %symetric par defaut
-trame_hann = trame.*win_hann;
-plot(t_trame,trame_hann);
-title('premiere trame fenetree');
+% t_trame = 0:Tech:len_trame*Tech-Tech;
+% figure,
+% subplot(2,1,1);
+% plot(t_trame,trame);
+% title('premiere trame');
+% 
+% subplot(2,1,2);
+% win_hann = hann(len_trame)'; %symetric par defaut
+% trame_hann = trame.*win_hann;
+% plot(t_trame,trame_hann);
+% title('premiere trame fenetree');
 
 %SIGNAL FENETRE RECONSTITUE EXACTEMENT
 
@@ -147,23 +147,23 @@ title('trame sans bruit , trame , trame debruite');
 
 legend('trame sans bruit','trame',' trame debruitee');
 
-figure,
-subplot(2,1,1)
-plot(t,signal_final);
-title('signal final');
-subplot(2,1,2);
-fs = 10000;
-win  = 8;
-spectro_noverlap = 0.5*win; 
-spectrogram(signal_final,win,spectro_noverlap,[],fech,'yaxis')
-title('spectro signal final');
+% figure,
+% subplot(2,1,1)
+% plot(t,signal_final);
+% title('signal final');
+% subplot(2,1,2);
+% fs = 10000;
+% win  = 8;
+% spectro_noverlap = 0.5*win; 
+% spectrogram(signal_final,win,spectro_noverlap,[],fech,'yaxis')
+% title('spectro signal final');
 
 figure,
 subplot(2,1,1)
 fs = 10000;
 win  = 8;
 spectro_noverlap = 0.5*win; 
-spectrogram(sig1,win,spectro_noverlap,[],fech,'yaxis')
+spectrogram(sig1_sans_bruit,win,spectro_noverlap,[],fech,'yaxis')
 title('spectro signal 1');
 subplot(2,1,2);
 fs = 10000;
