@@ -45,41 +45,19 @@ Rbb_unb = xcorr(bb,bb,'unbiased'); %Prend en compte le fait qu'il y est un nb fi
 powerspectre = (fftshift(abs(fft(bb))).^2)/N; % Spectre de puissance
 dsp = (fftshift(abs(fft(bb)).^2))*var; %DSP
 
-%PERIODOGRAMMES
+%% PERIODOGRAMMES
+
 %WELCH
 periodogramW = pwelch(bb,nfft,noverlap, 'centered');
 
 %DANIELL
 %On estime la DSP de chaque segment de m points pour lisser la courbe
-ws = 100;
-test = powerspectre;
-tmp = [];
-res=[];
-
-for i = 1:1:length(powerspectre)
-    
-    if (i-ws/2 < 1)
-        diff = 1-(i-ws/2);
-        tmp = [ test(length(test):-1:length(test)-diff) test(1:ws/2+i)];
-        res = [res sum(tmp)/ws];
-        
-        
-    elseif (i+ws/2 > length(test))
-        diff = (i+ws/2) - length(test);
-        tmp = [ test(i-ws/2:1:end) test(1:diff)];
-        res = [res sum(tmp)/ws];
-
-    else
-        res = [res sum(test(i-ws/2:i+ws/2))/ws]; 
-    end
-    
-end
+periodogramD = PDaniell(bb);
 
 %BARTLETT
-
 periodogramB = pwelch(bb,nfft,noverlapnul,'centered');
 
-%Correlogramme 1 et 2
+%% Correlogramme 1 et 2
 
 %correlo1= xcorr(bb-mean(bb)) / var;
 correlo1=abs(fft(Rbb_b));
@@ -150,7 +128,7 @@ xlabel('Fréquence normalisée')
 ylabel('Puissance') % en puissance
 
 subplot(3,1,2);
-plot(f,res);
+plot(f,periodogramD);
 title('PDaniell');
 xlabel('Fréquence normalisée')
 ylabel('Puissance') % en puissance

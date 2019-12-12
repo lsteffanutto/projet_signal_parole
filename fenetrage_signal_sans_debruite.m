@@ -1,7 +1,7 @@
-function [signal_final] = fenetrage_signal_sans_debruite(signal_reshape_imp, signal_reshape_pair,len_trame,nb_trames, recouvrement)
+function [signal_final, signal_final_sans_debut_fin] = fenetrage_signal_sans_debruite(signal_reshape_imp, signal_reshape_pair,len_trame,nb_trames, recouvrement)
 
 decal = len_trame*(1-recouvrement/100); %recouvrement = 50
-win_hann = hann(len_trame); % fenre de Hann sur la durée du trame
+win_hann = hamming(len_trame); % fenre de Hann sur la durée d'une trame
 
 win_hann_deb = win_hann(1:len_trame/2,1);   %debut d'une fenetre de hamming (1ere moitié)
 win_hann_fin = win_hann((len_trame/2)+1:len_trame,1);   %fin d'une fenetre de hamming (2nd moitié)
@@ -41,7 +41,8 @@ for j = 1 : decal
     zero = [zero 0 ];
 end
 
-signal_final = [ zero signal_windowed' zero ];
+signal_final_sans_debut_fin = [ zero signal_windowed' zero ];
+signal_final = [ signal_reshape_imp(1:decal,1)' signal_windowed' signal_reshape_imp(decal+1:len_trame,nb_trames)' ];
 
 end
 
