@@ -1,4 +1,4 @@
-function [trame_debruite, nb_valeurs] = debruitage_trame(trame,M,K)
+function [trame_debruite, val_sing] = debruitage_trame(trame,M,K,seuil)
 
 % M : ?
 % K : nombre de valeurs singulières à retenir pour caractériser le signal
@@ -11,10 +11,13 @@ sigHankel = hankel(trame(1:L),trame(L:L+M-1));
 
 [U,S,V]=svd(sigHankel); % Dans S on veut les K valeurs singulière les plus importantes sur les 129
 
-S=[S(:,1:K) zeros(size(S(:,K+1:end)))]; %Laisse les vs importante (skill incroyable)
+val_sing = S; % on collecte les valeurs singuliere qu'on va comparer au seuil
+
+S = S >= seuil;
+
+%S=[S(:,1:K) zeros(size(S(:,K+1:end)))]; %Laisse les vs importante (skill incroyable)
 
 H_LS = U*S*V'; %On retrouve bien Hankel
-
 trame_debruite = zeros(1,len_trame);
 for i=1:len_trame-M+1
     trame_debruite(i:i+M-1) = trame_debruite(i:i+M-1) + H_LS(i,:);

@@ -28,10 +28,14 @@ len_trame = 1024; %plus on augmente mieux c
 nb_trames = len_sig1/len_trame;
 recouvrement = 50;
 
+K=8;
+M=256;
+seuil = 0.45*10e4;
+
 %% TRAITEMENT
 
 %Bruitage
-sig1 = addnoise(sig1,10);
+sig1 = addnoise(sig1,5);
 
 %Signal en trames sans recouvrement
 sig1_trame_rec0 = reshape(sig1, [ len_trame, nb_trames]); % SIG1 découpé en 416 trames (colonnes) de 128 éléments
@@ -44,15 +48,27 @@ sig1_trame_rec0 = reshape(sig1, [ len_trame, nb_trames]); % SIG1 découpé en 41
 %Et reconstituer EXACTEMENT le signal de départ 
 %(sauf le début et la i.e. len_trames/2
 [signal_final_sans_debruite, signal_final_sans_debut_fin_sans_debruite] = fenetrage_signal_sans_debruite(sig1_reshape_imp, sig1_reshape_pair,len_trame,nb_trames, recouvrement);
-[signal_final, signal_final_sans_debut_fin] = fenetrage_signal(sig1_reshape_imp, sig1_reshape_pair,len_trame,nb_trames, recouvrement);
+[signal_final, signal_final_sans_debut_fin, val_sing_total] = fenetrage_signal(sig1_reshape_imp, sig1_reshape_pair,len_trame,nb_trames, recouvrement, K, M,seuil);
 
 [nb_erreurs_reconstruct] = is_the_same(sig1,signal_final_sans_debruite , len_trame);
 
 %Test de fenetrage d'une trame
 trame = sig1(11040:11040+len_trame-1);
-[trame_debruite, nb_valeurs] = debruitage_trame(trame, 128, 8);
+[trame_debruite, matrix_val_sing] = debruitage_trame(trame, M/2, K, seuil);
 
+val_sing_ligne = VS_matrix_to_line(matrix_val_sing, M/2);
 
+%% TESTS VS
+%On plot les VS d'une trame
+figure,
+plot(val_sing_ligne);
+
+%On plot les VS de toutes les trames du signal et on def un seuil
+figure, plot(val_sing_total);
+len_vs_tot = [1:14000];
+const = ones(1,14000)*seuil;
+hold on, plot(len_vs_tot,const,'r-');
+title('toutes les VS des trames du signal');
 %% FIGURES  
 
 %% SIGNAL 1 + SIGNAL BRUITE
@@ -298,9 +314,9 @@ spectrogram(signal_final,win,spectro_noverlap,[],fech,'yaxis')
 title('spectro signal final');
 
 %% AUDIOS (Même en arrangeant fréquentiellement toujours les bruits aigus)
-audiowrite('signal1.wav',sig1_sans_bruit,8000) %ECRIT LE SIGNAL DANS FICHIER AUDIO
-audiowrite('signal1bruit.wav',sig1,8000) %ECRIT LE SIGNAL DANS FICHIER AUDIO
-audiowrite('signal1debruite.wav',signal_final,8000) %ECRIT LE SIGNAL DANS FICHIER AUDIO
+% audiowrite('signal1.wav',sig1_sans_bruit,8000) %ECRIT LE SIGNAL DANS FICHIER AUDIO
+% audiowrite('signal1bruit.wav',sig1,8000) %ECRIT LE SIGNAL DANS FICHIER AUDIO
+% audiowrite('signal1debruite.wav',signal_final,8000) %ECRIT LE SIGNAL DANS FICHIER AUDIO
 %audiowrite('signal1decomp.wav',sig1_decomp,8000) SIGNAL AUDIO x2
 
 % audiowrite('samarche.wav',samarche,8000) %ECRIT LE SIGNAL DANS FICHIER AUDIO
