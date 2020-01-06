@@ -35,7 +35,7 @@ seuil = 0.45*10e4;
 %% TRAITEMENT
 
 %Bruitage
-sig1 = addnoise(sig1,5);
+sig1 = addnoise(sig1,15);
 
 %Signal en trames sans recouvrement
 sig1_trame_rec0 = reshape(sig1, [ len_trame, nb_trames]); % SIG1 découpé en 416 trames (colonnes) de 128 éléments
@@ -69,6 +69,11 @@ len_vs_tot = [1:14000];
 const = ones(1,14000)*seuil;
 hold on, plot(len_vs_tot,const,'r-');
 title('toutes les VS des trames du signal');
+
+%% RSB AVANT/APRES
+[ gain_RSB_signal_rehausse ] = RSB_signal_final( sig1_sans_bruit , signal_final )
+
+stop = 1;
 %% FIGURES  
 
 %% SIGNAL 1 + SIGNAL BRUITE
