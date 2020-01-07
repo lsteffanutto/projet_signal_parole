@@ -13,7 +13,8 @@ sigHankel = hankel(trame(1:L),trame(L:L+M-1));
 
 val_sing = S; % on collecte les valeurs singuliere qu'on va comparer au seuil
 
-S = S >= seuil;
+Stmp = S >= seuil;
+S = Stmp.*S;
 
 %S=[S(:,1:K) zeros(size(S(:,K+1:end)))]; %Laisse les vs importante (skill incroyable)
 

@@ -30,12 +30,12 @@ recouvrement = 50;
 
 K=8;
 M=256;
-seuil = 0.45*10e4;
+seuil = 0.35*10e4;
 
 %% TRAITEMENT
 
 %Bruitage
-sig1 = addnoise(sig1,15);
+sig1 = addnoise(sig1,5);
 
 %Signal en trames sans recouvrement
 sig1_trame_rec0 = reshape(sig1, [ len_trame, nb_trames]); % SIG1 découpé en 416 trames (colonnes) de 128 éléments
