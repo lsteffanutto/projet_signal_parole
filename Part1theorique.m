@@ -48,14 +48,14 @@ dsp = (fftshift(abs(fft(bb)).^2))*var; %DSP
 %% PERIODOGRAMMES
 
 %WELCH
-periodogramW = pwelch(bb,nfft,noverlap, 'centered');
+periodogramW = pwelch(bb,nfft,noverlap, 'centered')*10;
 
 %DANIELL
 %On estime la DSP de chaque segment de m points pour lisser la courbe
 periodogramD = PDaniell(bb);
 
 %BARTLETT
-periodogramB = pwelch(bb,nfft,noverlapnul,'centered');
+periodogramB = pwelch(bb,nfft,noverlapnul,'centered')*10;
 
 %% Correlogramme 1 et 2
 
@@ -113,9 +113,13 @@ title('Spectre de puissance du BBGC')
 xlabel('Fréquence normalisée')
 ylabel('Puissance') % en puissance
 
+len_vs_tot = [1:2048];
+const = ones(1,2048);
+
+
 subplot(2,1,2);
-plot(f, dsp);
-title('DSP du BBCG')
+plot(f, const);
+title('DSP théorique du BBCG')
 xlabel('Fréquence normalisée')
 ylabel('Puissance') % en puissance
 

@@ -1,4 +1,4 @@
-function [signal] = addnoise(signal,RSB)
+function [signal, sigma2] = addnoise(signal,RSB)
 
 SNR = 10.^-(RSB/10);
 
