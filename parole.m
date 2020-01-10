@@ -125,7 +125,7 @@ stop = 1;
 
 %% DIFFERENTES FENETRES POSSIBLES (HANNING c'est la mieux)
 
-%wvtool(rectwin(len_trame),hamming(len_trame),hann(len_trame)); %2eme orange 3eme jaune
+% wvtool(hamming(len_trame),hann(len_trame)); %2eme orange 3eme jaune
 % wvtool(gausswin(len_trame),flattopwin(len_trame),blackman(len_trame));
 
 %% SIGNAL DECOMP TRAMES
@@ -226,8 +226,8 @@ t_trame = 0:Tech:len_trame*Tech-Tech;
 figure,
 plot(trame_sans_bruit);
 
-% hold on;
-% plot(trame);
+hold on;
+plot(trame);
 
 hold on;
 % win_hann = hann(len_trame)'; %symetric par defaut
