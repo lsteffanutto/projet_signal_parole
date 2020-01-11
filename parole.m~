@@ -30,17 +30,17 @@ recouvrement = 50;
 
 K=8;
 M=256;
-seuil = 0.35*10e4;
-
-%5dB => seuil 0.35*10e4 %on peut pas prendre trop bas sinon dégueu
-%10dB => seuil 0.20*10e4
-%15dB => seuil 0.13*10e4
+seuil = 0.10*10e4;
+L = len_trame - 
+%5dB => seuil 0.35*10e4
+%10dB => seuil 0.35*10e4
+%15dB => seuil 0.35*10e4
 
 %% TRAITEMENT
 
 %Bruitage
-sig1 = addnoise(sig1,5);
-
+[sig1 ,sigma2] = addnoise(sig1,10);
+sigma2
 %Signal en trames sans recouvrement
 sig1_trame_rec0 = reshape(sig1, [ len_trame, nb_trames]); % SIG1 découpé en 416 trames (colonnes) de 128 éléments
 
