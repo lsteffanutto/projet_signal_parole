@@ -30,17 +30,17 @@ recouvrement = 50;
 
 K=8;
 M=256;
-seuil = 0.10*10e4;
-L = len_trame - 
-%5dB => seuil 0.35*10e4
-%10dB => seuil 0.35*10e4
-%15dB => seuil 0.35*10e4
+seuil = 0.35*10e4;
+
+%5dB => seuil 0.35*10e4 %on peut pas prendre trop bas sinon dégueu
+%10dB => seuil 0.20*10e4
+%15dB => seuil 0.13*10e4
 
 %% TRAITEMENT
 
 %Bruitage
-[sig1 ,sigma2] = addnoise(sig1,10);
-sigma2
+sig1 = addnoise(sig1,5);
+
 %Signal en trames sans recouvrement
 sig1_trame_rec0 = reshape(sig1, [ len_trame, nb_trames]); % SIG1 découpé en 416 trames (colonnes) de 128 éléments
 
@@ -64,15 +64,22 @@ val_sing_ligne = VS_matrix_to_line(matrix_val_sing, M/2);
 
 %% TESTS VS
 %On plot les VS d'une trame
-figure,
+
 plot(val_sing_ligne);
+title('VS d une trame du signal');
+xlabel('Echantillons d une trame');
+ylabel('Valeur des VS');
 
 %On plot les VS de toutes les trames du signal et on def un seuil
 figure, plot(val_sing_total);
+
 len_vs_tot = [1:14000];
 const = ones(1,14000)*seuil;
 hold on, plot(len_vs_tot,const,'r-');
-title('toutes les VS des trames du signal');
+title('Toutes les VS des trames du signal');
+xlabel('Trames du signal');
+ylabel('Valeur des VS');
+legend('VS des trames','seuil defini');
 
 %% RSB AVANT/APRES
 [ gain_RSB_signal_rehausse ] = RSB_signal_final( sig1_sans_bruit , signal_final )
@@ -240,7 +247,7 @@ plot(trame_debruite, 'g');
 
 title('trame sans bruit , trame , trame debruite');
 
-legend('trame sans bruit','trame',' trame debruitee');
+legend('trame sans bruit','trame',' trame rehaussee');
 
 %% Comparaison signal de depart / signal bruite / signal debruite
 
@@ -322,6 +329,19 @@ spectro_noverlap = 0.5*win;
 spectrogram(signal_final,win,spectro_noverlap,[],fech,'yaxis')
 title('spectro signal final');
 
+%% SIGNAL FINAL SEUL
+figure,
+subplot(2,1,1);
+plot(t,signal_final);
+title('signal final');
+xlabel('Temps en secondes');
+ylabel('Amplitude');
+subplot(2,1,2);
+fs = 10000;
+win  = 8;
+spectro_noverlap = 0.5*win; 
+spectrogram(signal_final,win,spectro_noverlap,[],fech,'yaxis')
+title('spectro signal final');
 %% AUDIOS (Même en arrangeant fréquentiellement toujours les bruits aigus)
 % audiowrite('signal1.wav',sig1_sans_bruit,8000) %ECRIT LE SIGNAL DANS FICHIER AUDIO
 % audiowrite('signal1bruit.wav',sig1,8000) %ECRIT LE SIGNAL DANS FICHIER AUDIO
